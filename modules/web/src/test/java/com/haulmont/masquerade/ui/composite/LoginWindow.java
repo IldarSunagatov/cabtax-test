@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package com.haulmont.masquerade.composite;
+package com.haulmont.masquerade.ui.composite;
 
 import com.haulmont.masquerade.Wire;
 import com.haulmont.masquerade.base.Composite;
 import com.haulmont.masquerade.components.*;
 import org.openqa.selenium.support.FindBy;
-
 
 public class LoginWindow extends Composite<LoginWindow> {
     @Wire

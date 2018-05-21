@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.haulmont.masquerade;
+package com.haulmont.masquerade.ui;
 
 import com.haulmont.masquerade.components.Untyped;
-import com.haulmont.masquerade.composite.LoginWindow;
+import com.haulmont.masquerade.ui.composite.LoginWindow;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -26,6 +26,7 @@ import static com.haulmont.masquerade.Components._$;
 import static com.haulmont.masquerade.Components.wire;
 import static com.haulmont.masquerade.Conditions.*;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @Ignore
 public class LoginTest {
@@ -37,6 +38,8 @@ public class LoginTest {
 
         assertNotNull(loginWindow.getLoginField());
         assertNotNull(loginWindow.getPasswordField());
+        assertNotNull(loginWindow.getLocalesSelect());
+        assertNotNull(loginWindow.getWelcomeLabel());
 
         loginWindow.getLoginField()
                 .shouldBe(EDITABLE)
@@ -57,7 +60,10 @@ public class LoginTest {
                 .shouldHave(caption("Submit"));
 
         String caption = loginWindow.getLoginButton().getCaption();
+        assertNotNull(caption);
+
         boolean enabled = loginWindow.getLoginButton().is(ENABLED);
+        assertTrue(enabled);
 
         Untyped loginFormLayout = wire(Untyped.class, "loginFormLayout");
         loginFormLayout.shouldBe(VISIBLE);
