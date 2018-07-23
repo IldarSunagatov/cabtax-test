@@ -1,4 +1,4 @@
-masquerade
+Test on masquerade
 ==========
 
 Cuba Platform UI testing library.
