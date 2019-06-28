@@ -21,6 +21,7 @@ import com.haulmont.masquerade.base.SelenideElementWrapper;
 import com.haulmont.masquerade.config.ComponentConfig;
 import com.haulmont.masquerade.config.DefaultComponentConfig;
 import com.haulmont.masquerade.sys.LoggingInvocationHandler;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.FindBy;
@@ -36,9 +37,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 import static com.codeborne.selenide.Selenide.$;
-import static com.haulmont.masquerade.Selectors.byChain;
-import static com.haulmont.masquerade.Selectors.byPath;
-import static com.haulmont.masquerade.Selectors.byTarget;
+import static com.haulmont.masquerade.Selectors.*;
 
 public class Components {
     private static final By BODY_MARKER_BY = By.tagName("body");
@@ -50,12 +49,17 @@ public class Components {
         components.putAll(defaultConfig.getComponents());
 
         // import implementations from project
-        ServiceLoader<ComponentConfig> configs = ServiceLoader.load(ComponentConfig.class);
-        for (ComponentConfig componentConfig : configs) {
-            LoggerFactory.getLogger(Components.class)
-                    .info("Loading components from {}", componentConfig.getClass());
+        try {
+            ServiceLoader<ComponentConfig> configs = ServiceLoader.load(ComponentConfig.class);
+            for (ComponentConfig componentConfig : configs) {
+                LoggerFactory.getLogger(Components.class)
+                        .info("Loading components from {}", componentConfig.getClass());
 
-            components.putAll(componentConfig.getComponents());
+                components.putAll(componentConfig.getComponents());
+            }
+        } catch (RuntimeException e) {
+            System.err.print("[ERROR] Components - Unable to load custom component configs: " + e.getMessage() + "\n"
+                    + ExceptionUtils.getStackTrace(e));
         }
     }
 
@@ -198,15 +202,15 @@ public class Components {
 
     @SuppressWarnings("unchecked")
     public static <T> T proxyComponent(Class<T> componentClass, T target) {
-        LoggingInvocationHandler invocationHandler = new LoggingInvocationHandler(componentClass, target);
-        invocationHandler.setProxyFactory((interfaceClass, object) -> {
-            if (SelenideElementWrapper.class.isAssignableFrom(interfaceClass)
-                    && interfaceClass.isInterface()) {
-                return proxyComponent(interfaceClass, object);
-            }
+        LoggingInvocationHandler invocationHandler = new LoggingInvocationHandler(componentClass, target,
+                (interfaceClass, object) -> {
+                    if (SelenideElementWrapper.class.isAssignableFrom(interfaceClass)
+                            && interfaceClass.isInterface()) {
+                        return proxyComponent(interfaceClass, object);
+                    }
 
-            return object;
-        });
+                    return object;
+                });
 
         return (T) Proxy.newProxyInstance(
                 componentClass.getClassLoader(),

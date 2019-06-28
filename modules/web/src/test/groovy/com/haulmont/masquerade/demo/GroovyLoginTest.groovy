@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.haulmont.masquerade
+package com.haulmont.masquerade.demo
 
 import com.haulmont.masquerade.components.Notification
-import com.haulmont.masquerade.composite.GroovyLoginWindow
+import com.haulmont.masquerade.demo.composite.GroovyLoginWindow
 import org.junit.Ignore
 import org.junit.Test
 

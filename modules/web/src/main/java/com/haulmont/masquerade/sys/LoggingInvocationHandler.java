@@ -41,17 +41,10 @@ public class LoggingInvocationHandler implements InvocationHandler {
     private final Object target;
     private ProxyFactory proxyFactory;
 
-    public LoggingInvocationHandler(Class componentClass, Object target) {
+    public LoggingInvocationHandler(Class componentClass, Object target, ProxyFactory proxyFactory) {
         this.log = LoggerFactory.getLogger(componentClass);
         this.targetId = getTargetId(target);
         this.target = target;
-    }
-
-    public ProxyFactory getProxyFactory() {
-        return proxyFactory;
-    }
-
-    public void setProxyFactory(ProxyFactory proxyFactory) {
         this.proxyFactory = proxyFactory;
     }
 

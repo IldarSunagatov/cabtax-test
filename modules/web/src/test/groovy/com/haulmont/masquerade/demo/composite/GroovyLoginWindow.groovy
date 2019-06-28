@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.haulmont.masquerade.composite
+package com.haulmont.masquerade.demo.composite
 
 import com.haulmont.masquerade.Wire
 import com.haulmont.masquerade.base.Composite

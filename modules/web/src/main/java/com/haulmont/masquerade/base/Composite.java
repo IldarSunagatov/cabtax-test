@@ -44,6 +44,13 @@ public abstract class Composite<T> extends AbstractSpecificConditionHandler<T> i
         return by;
     }
 
+    /**
+     * Creates the corresponging component implementation using the same {@link By} locator.
+     *
+     * @param clazz class of the component
+     * @param <X> type of component instnce
+     * @return component
+     */
     public <X> X actAs(Class<X> clazz) {
         return Components.wire(clazz, by);
     }

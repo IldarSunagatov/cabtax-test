@@ -18,6 +18,12 @@ package com.haulmont.masquerade.base;
 
 import org.openqa.selenium.By;
 
+/**
+ * Interface of components that store their {@link By} locator.
+ */
 public interface ByLocator {
+    /**
+     * @return By locator of the component
+     */
     By getBy();
 }
